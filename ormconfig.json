@@ -1,10 +1,9 @@
 {
     "type": "postgres",
-    "host": "localhost",
-    "port": 5432,
-    "username": "postgres",
-    "password": "1407",
-    "database": "sell_building",
+    "host": "surus.db.elephantsql.com",
+    "username": "awhtqazt",
+    "password": "DUSpQn7avhM7cGcWle6-0goUPyMceMkD",
+    "database": "awhtqazt",
     "entities": ["dist/**/*.entity{.ts,.js}"],
     "synchronize": true
 }

@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post, Res, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { Buildings } from './building.entity';
 import { BuildingsService } from './buildings.service';
 
@@ -8,15 +9,24 @@ export class BuildingsController {
         private readonly buildingService: BuildingsService
     ) {}
 
-    @Get()
-    getBuildings() {
-        return this.buildingService.getBuilding()
+    @Get(':home')
+    getBuildings(
+        @Param('home') home: number
+    ) {
+        return this.buildingService.getBuilding(home)
     }
 
     @Post()
+    @UseInterceptors(FilesInterceptor('file'))
     createBuilding(
-        @Body() building: Buildings
+        @Body() building: Buildings,
+        @UploadedFiles() file: Express.Multer.File,
+        @Headers('auth') auth: string
     ) {
-        return this.buildingService.createBuilding(building)
+        if (building && typeof file[0] !== "undefined") {
+            return this.buildingService.createBuilding(building, file[0].filename, auth)
+        } else {
+            return { statusText: 'Bad Request' }
+        }
     }
 }

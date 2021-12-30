@@ -1,7 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { Buildings } from 'src/buildings/building.entity';
-import { Company } from 'src/companys/company.entity';
-import { Branches } from './branches.entity';
+import { Body, Controller, Get, Headers, Param, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { BranchesService } from './branches.service';
 
 @Controller('branches')
@@ -15,12 +13,22 @@ export class BranchesController {
         return this.branchesService.getBranches()
     }
 
+    @Get(':id')
+    getSigleBranches(
+        @Param('id') id: string
+    ) {
+        return this.branchesService.getSigleBranches(id)
+    }
+
     @Post()
+    @UseInterceptors(FilesInterceptor('file'))
     createBranches(
         @Body('branch_name') branch_name: string,
         @Body('branch_region') branch_region: string,
-        @Body('buildings') buildings: Buildings[]
+        @Body('buildings') buildings : string,
+        @UploadedFiles() file: Express.Multer.File,
+        @Headers('auth') auth: string
     ) {
-        return this.branchesService.createBranches(branch_name, branch_region, buildings)      
+        return this.branchesService.createBranches(branch_name, branch_region, JSON.parse(buildings), file[0].filename, auth)
     }
 }

@@ -12,23 +12,21 @@ export class AdminService {
         private jwtService: JwtService
     ) {}
 
-    async register(admin: Admin, auth: string) {
+    async register(admin: Admin, auth: string) {        
         const access = await this.auth(auth)
-        const foundAdmin = await this.adminReposity.findOne({ admin_email: admin.admin_email })
-        
-        if (!foundAdmin && access) {
+        const foundAdmin = await this.adminReposity.findOne({ admin_email: admin.admin_email })        
+        if (!foundAdmin && access.id) {
             const newAdmin = this.adminReposity.create(admin)
-            const jwt = await this.jwtService.signAsync({ id: newAdmin.admin_uid })
             await this.adminReposity.save(newAdmin)
-            return { accessToken: 'Bearer ' + jwt }
+            return { message: 'created' }
         } else {
             return new BadRequestException()
         } 
     }
 
     async login(admin: Admin) {
-        const foundAdmin = await this.adminReposity.findOne(admin)
-
+        const foundAdmin = await this.adminReposity.findOne({ admin_email: admin.admin_email })
+        
         if (foundAdmin) {
             const jwt = await this.jwtService.signAsync({ id: foundAdmin.admin_uid })
             return { accessToken: 'Bearer ' + jwt }

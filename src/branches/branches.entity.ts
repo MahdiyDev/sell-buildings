@@ -6,6 +6,8 @@ export class Branches {
     @PrimaryGeneratedColumn('uuid')
     branch_uid: string
     @Column({ nullable: false })
+    branch_img: string
+    @Column({ nullable: false })
     branch_name: string
     @Column({ nullable: false })
     branch_region: string

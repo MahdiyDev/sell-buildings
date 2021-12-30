@@ -1,13 +1,13 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Banks {
+export class Sellers {
     @PrimaryGeneratedColumn('uuid')
-    bank_uid: string
+    seller_uid: string
     @Column({ nullable: false })
-    bank_img: string
+    seller_email: string
     @Column({ nullable: false })
-    bank_name: string
+    seller_password: string
     @Column({ nullable: false })
-    bank_credit_num: number
+    seller_type: string
 }

@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { Banks } from './banks.entity';
 import { BanksService } from './banks.service';
 
@@ -8,15 +9,20 @@ export class BanksController {
         private readonly bankService: BanksService
     ) {}
 
-    @Get()
-    getBanks() {
-        return this.bankService.getBanks()
+    @Get(':num')
+    getBanks(
+        @Param('num') num: number
+    ) {
+        return this.bankService.getBanks(num)
     }
 
     @Post()
+    @UseInterceptors(FilesInterceptor('file'))
     createBank(
-        @Body() bank: Banks
+        @Body() bank: Banks,
+        @UploadedFiles() file: Express.Multer.File,
+        @Headers('auth') auth: string
     ) {
-        return this.bankService.createBank(bank)
+        return this.bankService.createBank(bank, file[0].filename, auth)
     }
 }

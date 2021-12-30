@@ -7,5 +7,11 @@ export class Buildings {
     @Column({ nullable: false })
     building_room_count: number
     @Column({ nullable: false })
+    building_price: number
+    @Column({ nullable: false })
     building_info: string
+    @Column({ nullable: false })
+    building_home_num: number
+    @Column({ nullable: false })
+    building_image: string
 }

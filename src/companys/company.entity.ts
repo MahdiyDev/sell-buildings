@@ -6,6 +6,8 @@ export class Company {
     @PrimaryGeneratedColumn('uuid')
     company_uid: string
     @Column({ nullable: false })
+    company_img: string
+    @Column({ nullable: false })
     company_name: string
     @Column({ nullable: false })
     company_info: string
